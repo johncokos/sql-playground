@@ -25,6 +25,8 @@ function App() {
       return;
     }
 
+    sql.replace(';', '');
+
     alasql.promise(sql)
       .then( result => {
         if ( sql.match(/^select/i) ) {
