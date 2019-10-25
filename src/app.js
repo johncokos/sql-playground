@@ -20,9 +20,13 @@ function App() {
   const runQuery = (e) => {
     e.preventDefault();
 
+    if ( ! sql.match(/^(select|insert|update)/ig) ) {
+      setError('Unspported SQL Statement');
+      return;
+    }
+
     alasql.promise(sql)
       .then( result => {
-        console.log(result);
         if ( sql.match(/^select/i) ) {
           setData(result);
           setError('');
@@ -35,7 +39,7 @@ function App() {
   };
 
   const getAllRecords = () => {
-    setData( alasql("SELECT * FROM shapes") );
+    setData( alasql('SELECT * FROM shapes') );
     setError('');
   };
 
@@ -55,7 +59,7 @@ function App() {
   };
 
   useEffect( () => {
-    alasql("CREATE TABLE shapes (id int AUTO_INCREMENT, shape string, color string)");
+    alasql('CREATE TABLE shapes (id int AUTO_INCREMENT, shape string, color string)');
     let count = 0;
     const starterData = generateRandomData();
     starterData.forEach( shape => {
