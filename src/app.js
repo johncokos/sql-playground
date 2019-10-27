@@ -5,7 +5,7 @@ import Table from './components/table.js';
 import Shapes from './components/shapes.js';
 import Header from './components/header.js';
 
-import './app.scss';
+import './design/app.scss';
 
 function App() {
 
@@ -20,7 +20,7 @@ function App() {
   const runQuery = (e) => {
     e.preventDefault();
 
-    if ( ! sql.match(/^(select|insert|update)/ig) ) {
+    if ( ! sql.trim().match(/^(select|insert|update|delete)/ig) ) {
       setError('Unspported SQL Statement');
       return;
     }
@@ -45,15 +45,17 @@ function App() {
     setError('');
   };
 
-  const generateRandomData = () => {
-    const shapes = ['circle','square','triangle'];
+  const generateStarterData = () => {
+    const shapes = ['circle','square','triangle','oval', 'rectangle'];
     const colors = ['green','pink','silver','aqua'];
     const starterData = [];
 
-    for (let i=1; i <= 24; i++) {
-      const shape = shapes[Math.floor(Math.random() * (shapes.length))];
-      const color = colors[Math.floor(Math.random() * (colors.length))];
-      starterData.push({shape,color});
+    for (let i=0; i < shapes.length; i++) {
+      const shape = shapes[i];
+      for(let x=0; x < colors.length; x++) {
+        const color = colors[x];
+        starterData.push({shape,color});
+      }
     }
 
     return starterData;
@@ -61,9 +63,8 @@ function App() {
   };
 
   useEffect( () => {
+    const starterData = generateStarterData();
     alasql('CREATE TABLE shapes (id int AUTO_INCREMENT, shape string, color string)');
-    let count = 0;
-    const starterData = generateRandomData();
     starterData.forEach( shape => {
       alasql(`INSERT INTO shapes (shape,color) VALUES ("${shape.shape}", "${shape.color}" )`);
     });
@@ -72,29 +73,19 @@ function App() {
 
   return (
     <main>
-
       <Header />
-
       <section>
-
         <div>
-
           <div className="form">
             <form onSubmit={runQuery}>
-              <input name="sql" onChange={makeQuery} />
+              <input name="sql" placeholder="SQL Statement..." onChange={makeQuery} />
             </form>
-
             <div className="error">{error}</div>
           </div>
-
           <Shapes data={data} />
-
         </div>
-
         <Table data={data} />
-
       </section>
-
     </main>
   );
 }

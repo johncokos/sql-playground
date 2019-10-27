@@ -16,7 +16,12 @@ const Shapes = (props) => {
     <div className="shapes">
       {
         data.map( (item,i) => {
-          return <span key={i} style={getStyleForShape(item)} className={`shape ${item.shape}`}>{item.id}</span>
+          return (
+            <div className='shapeBox'>
+              <span key={i} style={getStyleForShape(item)} className={`shape ${item.shape}`}></span>
+              <span>{item.id}</span>
+            </div>
+          );
         })
       }
     </div>
