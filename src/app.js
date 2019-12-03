@@ -47,7 +47,7 @@ function App() {
 
   const generateStarterData = () => {
     const shapes = ['circle','square','triangle','oval', 'rectangle'];
-    const colors = ['green','pink','silver','aqua'];
+    const colors = ['green','pink','silver','blue'];
     const starterData = [];
 
     for (let i=0; i < shapes.length; i++) {
